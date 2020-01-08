@@ -21,12 +21,15 @@ public:
         SDL_DestroyWindow(m_window);
     }
 
-    int Init(int w, int h)
+    int Init(int w, int h, bool flip_y)
     {
+        m_flip_y = flip_y;
+
+        SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
         m_window = SDL_CreateWindow("Render3d App",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             w, h,
-            SDL_WINDOW_OPENGL);
+            SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
         if (!m_window)
             return -1;
 
@@ -51,7 +54,7 @@ public:
     void DrawPixel(int x, int y, const Color& color)
     {
         SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
-        SDL_RenderDrawPoint(m_renderer, x, y);
+        SDL_RenderDrawPoint(m_renderer, x, m_flip_y ? (GetHeight() - y) : y);
     }
 
     int GetWidth() const
@@ -71,18 +74,19 @@ private:
 
     SDL_Window*     m_window{ nullptr };
     SDL_Renderer*   m_renderer{ nullptr };
+    bool m_flip_y{ false };
 
 };
 
 render3d::Window::Window() = default;
 
-int render3d::Window::Init(int width, int height)
+int render3d::Window::Init(int width, int height, bool flip_y)
 {
     if (m_impl)
         return 1;
 
     m_impl = std::make_shared<Window::Impl>();
-    auto ret = m_impl->Init(width, height);
+    auto ret = m_impl->Init(width, height, flip_y);
     if (ret < 0)
         m_impl.reset();
 

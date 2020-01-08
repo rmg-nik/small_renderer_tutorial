@@ -11,7 +11,16 @@ set(targetSource
     "Application.cpp"
     "Window.cpp"
     "Logic.cpp"
+    "tinyrenderer/model.cpp"
     )
+
+#include_directories()
 add_executable(${targetName} ${targetSource})
 
 target_link_libraries(${targetName} SDL2-static SDL2main)
+
+add_custom_command(
+        TARGET ${targetName} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/data/african_head.obj
+                ${CMAKE_CURRENT_BINARY_DIR}/african_head.obj)

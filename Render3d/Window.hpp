@@ -28,7 +28,7 @@ namespace render3d
 
         Window();
 
-        int Init(int width, int height);
+        int Init(int width, int height, bool flip_y);
 
         void Clear(const Color& color);
 

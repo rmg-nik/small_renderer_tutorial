@@ -1,4 +1,4 @@
-﻿#include <Render3d/Application.h>
+﻿#include <Render3d/Application.hpp>
 #include <Render3d/Window.hpp>
 #include <Render3d/Logic.hpp>
 #include <SDL.h>
@@ -17,7 +17,7 @@ public:
             return -1;
         }
         Window window;
-        if (window.Init(1280, 1024) < 0)
+        if (window.Init(1280, 1024, true) < 0)
         {
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Cannot init window '%s'", SDL_GetError());
             return -1;
